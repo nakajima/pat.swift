@@ -58,19 +58,21 @@ public enum Log {
 		write(.error, message: message)
 	}
 
-	public static func `catch`(_ message: String? = nil, callback: @escaping () throws -> Void) {
+	@discardableResult public static func `catch`<T>(_ message: String? = nil, callback: @escaping () throws -> T?) -> T? {
 		do {
-			try callback()
+			return try callback()
 		} catch {
 			Log.error((message ?? "Error") + ": \(error)")
+			return nil
 		}
 	}
 
-	public static func `catch`(_ message: String, callback: @escaping () async throws -> Void) async {
+	@discardableResult public static func `catch`<T>(_ message: String, callback: @escaping () async throws -> T?) async -> T? {
 		do {
-			try await callback()
+			return try await callback()
 		} catch {
 			Log.error(message + ": \(error)")
+			return nil
 		}
 	}
 
