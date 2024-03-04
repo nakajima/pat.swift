@@ -7,16 +7,16 @@
 
 import SwiftUI
 
-struct TextThatFits: View {
+public struct TextThatFits: View {
 	var text: String
 	var fonts: [Font]
 
-	init(_ text: String, fonts: [Font] = [.largeTitle, .title, .title2, .title3, .body, .subheadline, .caption, .caption2]) {
+	public init(_ text: String, fonts: [Font] = [.largeTitle, .title, .title2, .title3, .body, .subheadline, .caption, .caption2]) {
 		self.text = text
 		self.fonts = fonts
 	}
 
-	var body: some View {
+	public var body: some View {
 		ViewThatFits {
 			ForEach(0 ..< fonts.count, id: \.self) { i in
 				Text(text)
