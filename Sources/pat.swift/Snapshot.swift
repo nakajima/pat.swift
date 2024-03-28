@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 extension View {
 	@MainActor public func snapshot() -> UIImage? {
