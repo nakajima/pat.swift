@@ -5,6 +5,7 @@
 //  Created by Pat Nakajima on 9/7/21.
 //
 
+#if canImport(UIKit)
 import SwiftUI
 import UIKit
 
@@ -15,3 +16,4 @@ extension View {
 		return renderer.uiImage
 	}
 }
+#endif
