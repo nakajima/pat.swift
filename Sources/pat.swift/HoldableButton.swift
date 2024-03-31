@@ -1,6 +1,6 @@
 //
 //  HoldableButton.swift
-//  pat.swift
+//  HoldableButton.swift
 //
 //  Created by Pat Nakajima on 7/16/23.
 //

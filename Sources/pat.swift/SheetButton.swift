@@ -1,6 +1,6 @@
 //
 //  SheetButton.swift
-//  pat.swift
+//  SheetButton.swift
 //
 //  Created by Pat Nakajima on 6/21/22.
 //

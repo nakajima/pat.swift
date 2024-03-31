@@ -1,5 +1,5 @@
 //
-//  DragDismissableModifier.swift
+//  DragDismissable.swift
 //  Wub4
 //
 //  Created by Pat Nakajima on 7/17/23.

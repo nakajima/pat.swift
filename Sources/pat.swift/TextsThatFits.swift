@@ -1,5 +1,5 @@
 //
-//  TextThatFits.swift
+//  TextsThatFits.swift
 //
 //
 //  Created by Pat Nakajima on 12/4/22.

@@ -1,6 +1,6 @@
 //
 //  CenteredScollView.swift
-//  pat.swift
+//  CenteredScollView.swift
 //
 //  Created by Pat Nakajima on 8/28/22.
 //
@@ -45,4 +45,3 @@ struct VScrollView_Previews: PreviewProvider {
 		}
 	}
 }
-
