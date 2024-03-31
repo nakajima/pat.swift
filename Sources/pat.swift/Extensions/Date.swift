@@ -14,7 +14,7 @@ public extension Date {
 			return ""
 		}
 
-		switch i {
+		switch abs(i) {
 		case 0 ..< 60:
 			return "\(i)s"
 		case 60 ..< 3600:
