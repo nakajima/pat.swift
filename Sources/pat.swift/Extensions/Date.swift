@@ -14,15 +14,17 @@ public extension Date {
 			return ""
 		}
 
-		switch abs(i) {
+		let absI = abs(i)
+
+		switch absI {
 		case 0 ..< 60:
-			return "\(i)s"
+			return "\(absI)s"
 		case 60 ..< 3600:
-			return "\(i / 60)m"
+			return "\(absI / 60)m"
 		case 3600 ..< 86400:
-			return "\(i / 3600)h"
+			return "\(absI / 3600)h"
 		case 86400 ..< 604_800:
-			return "\(i / 86400)d"
+			return "\(absI / 86400)d"
 		default:
 			let formatter = DateFormatter()
 			formatter.dateFormat = "MM/dd/yyyy"
