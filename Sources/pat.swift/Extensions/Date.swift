@@ -7,7 +7,8 @@
 
 import Foundation
 
-extension Date {
+// TODO: This should probably be a duration formatter
+public extension Date {
 	var shortPretty: String {
 		guard let i = Calendar.current.dateComponents([.second], from: self, to: Date()).second else {
 			return ""
