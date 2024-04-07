@@ -98,3 +98,11 @@ public struct DiskLogger {
 		}
 	}
 }
+
+#if DEBUG
+extension DiskLogger {
+	static let preview = {
+		DiskLogger(location: URL.temporaryDirectory.appending(path: "logs.log"))
+	}()
+}
+#endif
