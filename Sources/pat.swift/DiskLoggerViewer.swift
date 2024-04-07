@@ -19,7 +19,7 @@ public struct DiskLoggerViewer: View {
 	public var body: some View {
 		if let entries = logger.entries {
 			List {
-				ForEach(entries, id: \.timestamp) { entry in
+				ForEach(Array(entries.enumerated()), id: \.0) { (_, entry) in
 					VStack(alignment: .leading, spacing: 4) {
 						Text(entry.text)
 							.padding(2)
