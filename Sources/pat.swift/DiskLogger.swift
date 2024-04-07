@@ -12,8 +12,38 @@ public struct DiskLogger {
 	let logger: Logger
 	public let location: URL
 
-	enum LogType: String {
+	public enum LogType: String {
 		case trace, debug, info, warning, error, fault, critical
+	}
+
+	public struct Entry {
+		static let formatter = ISO8601DateFormatter()
+
+		public let timestamp: Date
+		public let level: LogType
+		public let text: String
+
+		init?(string: String) {
+			let parts = string.split(separator: "\t", maxSplits: 3).map { String($0) }
+
+			guard parts.count == 3,
+				let level = LogType(rawValue: parts[0].lowercased()),
+				let timestamp = Entry.formatter.date(from: parts[1]) else {
+				return nil
+			}
+
+			self.level = level
+			self.timestamp = timestamp
+			self.text = parts[2]
+		}
+	}
+
+	public func clear() throws {
+		try FileManager.default.removeItem(at: location)
+	}
+
+	public var entries: [Entry]? {
+		try? String(contentsOf: location, encoding: .utf8).split(separator: "\n").compactMap { Entry(string: String($0)) }
 	}
 
 	public init(location: URL, subsystem: String = Bundle.main.bundleIdentifier!, category: String = "DiskLogger") {
