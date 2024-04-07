@@ -51,7 +51,7 @@ public struct DiskLogger {
 
 	func write(_ level: LogType, _ message: String) {
 		do {
-			let text = "\(level.rawValue.uppercased()) \(Date().ISO8601Format()) - \(message)\n"
+			let text = "\(level.rawValue.uppercased())\t\(Date().ISO8601Format())\t\(message)\n"
 			try Data(text.utf8).append(to: location)
 		} catch {
 
