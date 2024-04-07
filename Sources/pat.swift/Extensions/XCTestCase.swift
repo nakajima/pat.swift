@@ -5,6 +5,7 @@
 //  Created by Pat Nakajima on 4/2/24.
 //
 
+#if canImport(XCTest)
 import XCTest
 
 public extension XCTestCase {
@@ -17,3 +18,4 @@ public extension XCTestCase {
 		}
 	}
 }
+#endif
