@@ -18,26 +18,28 @@ public struct DiskLoggerViewer: View {
 
 	public var body: some View {
 		if let entries = logger.entries {
-			List {
-				ForEach(Array(entries.enumerated()), id: \.0) { (_, entry) in
-					VStack(alignment: .leading, spacing: 4) {
-						Text(entry.text)
-							.padding(2)
-						HStack(alignment: .firstTextBaseline) {
-							Text(entry.level.rawValue.uppercased())
+			TimelineView(.periodic(from: Date(), by: 1)) { _ in
+				List {
+					ForEach(Array(entries.reversed().enumerated()), id: \.0) { (_, entry) in
+						VStack(alignment: .leading, spacing: 4) {
+							Text(entry.text)
 								.padding(2)
-								.padding(.horizontal, 4)
-								.background(.ultraThinMaterial)
-								.clipShape(RoundedRectangle(cornerRadius: 4))
-								.font(.caption2)
-							Text(entry.timestamp.formatted(date: .numeric, time: .standard))
+							HStack(alignment: .firstTextBaseline) {
+								Text(entry.level.rawValue.uppercased())
+									.padding(2)
+									.padding(.horizontal, 4)
+									.background(.ultraThinMaterial)
+									.clipShape(RoundedRectangle(cornerRadius: 4))
+									.font(.caption2)
+								Text(entry.timestamp.formatted(date: .numeric, time: .standard))
+							}
 						}
+						.listRowInsets(.init(top: 8, leading: 12, bottom: 8, trailing: 4))
 					}
-					.listRowInsets(.init(top: 8, leading: 12, bottom: 8, trailing: 4))
+					.font(.caption)
 				}
-				.font(.caption)
+				.fontDesign(.monospaced)
 			}
-			.fontDesign(.monospaced)
 		} else {
 			Text("No logs found.")
 		}
