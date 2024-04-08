@@ -8,8 +8,7 @@
 import Foundation
 import OSLog
 
-public struct DiskLogger {
-	let logger: Logger
+public struct DiskLogger: Sendable {
 	public let location: URL
 
 	public enum LogType: String {
@@ -48,7 +47,7 @@ public struct DiskLogger {
 
 	public init(location: URL, subsystem: String = Bundle.main.bundleIdentifier!, category: String = "DiskLogger") {
 		self.location = location
-		self.logger = Logger(subsystem: subsystem, category: category)
+//		self.logger = Logger(subsystem: subsystem, category: category)
 	}
 
 	public func trace(_ message: String) {
@@ -88,13 +87,14 @@ public struct DiskLogger {
 		}
 
 		switch level {
-		case .trace: 		logger.trace("\(message)")
-		case .debug: 		logger.debug("\(message)")
-		case .info: 		logger.info("\(message)")
-		case .warning:	logger.warning("\(message)")
-		case .error: 		logger.error("\(message)")
-		case .fault:		logger.fault("\(message)")
-		case .critical: logger.critical("\(message)")
+		case .trace, .debug:
+			os_log(.debug, "\(message)")
+		case .info:
+			os_log(.info, "\(message)")
+		case .warning, .error:
+			os_log(.error, "\(message)")
+		case .fault, .critical:
+			os_log(.fault, "\(message)")
 		}
 	}
 }
