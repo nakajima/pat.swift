@@ -38,6 +38,16 @@ public struct DiskLoggerViewer: View {
 					}
 					.font(.caption)
 				}
+				.toolbar {
+					ToolbarItem {
+						Button("Clear") {
+							withAnimation {
+								try? logger.clear()
+							}
+						}
+						.buttonStyle(.bordered)
+					}
+				}
 				.fontDesign(.monospaced)
 			}
 		} else {
