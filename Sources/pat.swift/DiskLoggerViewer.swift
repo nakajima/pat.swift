@@ -10,6 +10,8 @@ import Foundation
 import SwiftUI
 
 public struct DiskLoggerViewer: View {
+	@Environment(\.dismiss) var dismiss
+
 	var logger: DiskLogger
 
 	public init(logger: DiskLogger) {
@@ -51,7 +53,13 @@ public struct DiskLoggerViewer: View {
 		}
 		.toolbar {
 			ToolbarItem(placement: .bottomBar) {
-				Button("Clear") {
+				Button("Done") {
+					dismiss()
+				}
+				.buttonStyle(.bordered)
+			}
+			ToolbarItem(placement: .bottomBar) {
+				Button("Clear Logs") {
 					withAnimation {
 						try? logger.clear()
 					}
