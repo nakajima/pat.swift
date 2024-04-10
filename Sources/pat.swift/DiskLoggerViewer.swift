@@ -52,13 +52,13 @@ public struct DiskLoggerViewer: View {
 			logger.load()
 		}
 		.toolbar {
-			ToolbarItem(placement: .bottomBar) {
+			ToolbarItem {
 				Button("Done") {
 					dismiss()
 				}
 				.buttonStyle(.bordered)
 			}
-			ToolbarItem(placement: .bottomBar) {
+			ToolbarItem {
 				Button("Clear Logs") {
 					withAnimation {
 						try? logger.clear()
