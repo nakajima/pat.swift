@@ -39,7 +39,7 @@ public struct DiskLoggerViewer: View {
 					.font(.caption)
 				}
 				.toolbar {
-					ToolbarItem {
+					ToolbarItem(placement: .bottomBar) {
 						Button("Clear") {
 							withAnimation {
 								try? logger.clear()
