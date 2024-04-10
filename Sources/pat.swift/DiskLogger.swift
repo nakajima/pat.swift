@@ -8,7 +8,7 @@
 import Foundation
 import OSLog
 
-public struct DiskLogger: Sendable {
+@Observable public final class DiskLogger: Sendable {
 	public let location: URL
 
 	public enum LogType: String {
@@ -37,12 +37,17 @@ public struct DiskLogger: Sendable {
 		}
 	}
 
+	var entries: [Entry] = []
+
 	public func clear() throws {
 		try FileManager.default.removeItem(at: location)
+		self.entries = []
 	}
 
-	public var entries: [Entry]? {
-		try? String(contentsOf: location, encoding: .utf8).split(separator: "\n").compactMap { Entry(string: String($0)) }
+	public func load() {
+		if let entries = try? String(contentsOf: location, encoding: .utf8).split(separator: "\n").compactMap({ Entry(string: String($0)) }) {
+			self.entries = entries
+		}
 	}
 
 	public init(location: URL, subsystem: String = Bundle.main.bundleIdentifier!, category: String = "DiskLogger") {
