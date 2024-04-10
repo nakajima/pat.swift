@@ -17,10 +17,13 @@ public struct DiskLoggerViewer: View {
 	}
 
 	public var body: some View {
-		if let entries = logger.entries {
 			TimelineView(.periodic(from: Date(), by: 1)) { _ in
 				List {
-					ForEach(Array(entries.reversed().enumerated()), id: \.0) { (_, entry) in
+					if logger.entries.isEmpty {
+						Text("No logs found.")
+					}
+					
+					ForEach(Array(logger.entries.reversed().enumerated()), id: \.0) { (_, entry) in
 						VStack(alignment: .leading, spacing: 4) {
 							Text(entry.text)
 								.padding(2)
@@ -50,9 +53,8 @@ public struct DiskLoggerViewer: View {
 				}
 				.fontDesign(.monospaced)
 			}
-		} else {
-			Text("No logs found.")
-		}
+
+
 	}
 }
 
