@@ -8,11 +8,15 @@
 import Foundation
 
 public protocol AnyOptional {
+	var isNil: Bool { get }
+}
 
+public extension AnyOptional {
+	var isNil: Bool { false }
 }
 
 extension Optional: AnyOptional {
-
+	public var isNil: Bool { true }
 }
 
 @propertyWrapper public struct UserDefault<Value: Codable> {
@@ -36,7 +40,15 @@ extension Optional: AnyOptional {
 			if serialized {
 				storage.setValue(try? JSONEncoder().encode(newValue), forKey: key)
 			} else {
-				storage.setValue(newValue, forKey: key)
+				if let optionalValue = newValue as? AnyOptional {
+					if optionalValue.isNil {
+						storage.removeObject(forKey: key)
+					} else {
+						storage.setValue(optionalValue, forKey: key)
+					}
+				} else {
+					storage.setValue(newValue, forKey: key)
+				}
 			}
 		}
 	}
