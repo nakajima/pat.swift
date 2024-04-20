@@ -7,6 +7,14 @@
 
 import Foundation
 
+public protocol AnyOptional {
+
+}
+
+extension Optional: AnyOptional {
+
+}
+
 @propertyWrapper public struct UserDefault<Value: Codable> {
 	public var wrappedValue: Value {
 		get {
@@ -48,5 +56,18 @@ import Foundation
 			self.key = key
 			self.storage = storage
 			self.serialized = serialize
+	}
+}
+
+extension UserDefault where Value: ExpressibleByNilLiteral {
+	public init(
+		key: String,
+		storage: UserDefaults = .standard,
+		serialize: Bool = false
+	) {
+		self.defaultValue = nil
+		self.key = key
+		self.storage = storage
+		self.serialized = serialize
 	}
 }
