@@ -7,8 +7,8 @@
 
 import Foundation
 
-@propertyWrapper struct UserDefault<Value: Codable> {
-	var wrappedValue: Value {
+@propertyWrapper public struct UserDefault<Value: Codable> {
+	public var wrappedValue: Value {
 		get {
 			if serialized {
 				if let data = storage.data(forKey: key),
@@ -38,7 +38,7 @@ import Foundation
 	var storage: UserDefaults
 	var serialized: Bool
 
-	init(
+	public init(
 		wrappedValue defaultValue: Value,
 		key: String,
 		storage: UserDefaults = .standard,
