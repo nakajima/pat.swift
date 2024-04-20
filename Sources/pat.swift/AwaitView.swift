@@ -31,7 +31,7 @@ public struct AwaitView<T, Content: View, Placeholder: View>: View {
 	public var body: some View {
 		switch status {
 		case .waiting:
-			ProgressView()
+			placeholderView
 				.task {
 					await getValue()
 				}
@@ -41,6 +41,14 @@ public struct AwaitView<T, Content: View, Placeholder: View>: View {
 			Text("Canceled")
 		case .errored(let error):
 			Text("Errored: \(error)")
+		}
+	}
+
+	@ViewBuilder var placeholderView: some View {
+		if let placeholder {
+			placeholder()
+		} else {
+			ProgressView()
 		}
 	}
 
@@ -71,13 +79,20 @@ extension AwaitView where Placeholder == Never {
 #if DEBUG
 struct AwaitViewPreviews: PreviewProvider {
 	static var previews: some View {
-		VStack {
-			AwaitView {
-				try! await Task.sleep(for: .seconds(2))
-				return "The Time is \(Date().formatted())"
-			} content: { value in
-				Text(value)
-			}
+		AwaitView {
+			try! await Task.sleep(for: .seconds(2))
+			return "The Time is \(Date().formatted())"
+		} content: { value in
+			Text(value)
+		}
+
+		AwaitView {
+			try! await Task.sleep(for: .seconds(2))
+			return "The Time is \(Date().formatted())"
+		} content: { value in
+			Text(value)
+		} placeholder: {
+			Text("Loading the time.")
 		}
 	}
 }
