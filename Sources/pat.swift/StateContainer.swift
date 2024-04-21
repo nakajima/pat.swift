@@ -9,20 +9,20 @@ import Foundation
 import SwiftUI
 import Observation
 
-public struct StateContainer<Content: View, Value>: View {
-	@Observable public class Container {
-		public var value: Value
+@Observable public class StateContainerValue<Value> {
+	public var value: Value
 
-		init(value: Value) {
-			self.value = value
-		}
+	init(value: Value) {
+		self.value = value
 	}
+}
 
-	@State var container: Container
-	@ViewBuilder var content: (Container) -> Content
+public struct StateContainer<Content: View, Value>: View {
+	@State var container: StateContainerValue<Value>
+	var content: (StateContainerValue<Value>) -> Content
 
-	public init(initial: Value, content: @escaping (Container) -> Content) {
-		self.container = Container(value: initial)
+	public init(initial: Value, @ViewBuilder content: @escaping (StateContainerValue<Value>) -> Content) {
+		self.container = StateContainerValue(value: initial)
 		self.content = content
 	}
 
@@ -35,6 +35,7 @@ public struct StateContainer<Content: View, Value>: View {
 #Preview {
 	StateContainer(initial: 1) { container in
 		Button("State is \(container.value)") { container.value += 1 }
+		Text("Hi")
 	}
 }
 #endif
