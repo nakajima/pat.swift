@@ -12,7 +12,7 @@
 	public struct DiskLoggerViewer: View {
 		@Environment(\.dismiss) var dismiss
 
-		var logger: DiskLogger
+		@State var logger: DiskLogger
 
 		public init(logger: DiskLogger) {
 			self.logger = logger
