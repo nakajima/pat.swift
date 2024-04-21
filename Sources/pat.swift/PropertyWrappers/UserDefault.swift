@@ -19,8 +19,8 @@ extension Optional: AnyOptional {
 	public var isNil: Bool { true }
 }
 
-@propertyWrapper public struct UserDefault<Value: Codable> {
-	public var wrappedValue: Value {
+@propertyWrapper public struct UserDefault<Value: Codable & ExpressibleByNilLiteral> {
+	public var wrappedValue: Value? {
 		get {
 			if serialized {
 				if let data = storage.data(forKey: key),
@@ -33,7 +33,7 @@ extension Optional: AnyOptional {
 				}
 			}
 
-			return defaultValue
+			return nil
 		}
 
 		set {
@@ -55,31 +55,15 @@ extension Optional: AnyOptional {
 		}
 	}
 
-	var defaultValue: Value
 	var key: String
 	var storage: UserDefaults
 	var serialized: Bool
 
 	public init(
-		wrappedValue defaultValue: Value,
 		key: String,
 		storage: UserDefaults = .standard,
 		serialize: Bool = false
 	) {
-			self.defaultValue = defaultValue
-			self.key = key
-			self.storage = storage
-			self.serialized = serialize
-	}
-}
-
-extension UserDefault where Value: ExpressibleByNilLiteral {
-	public init(
-		key: String,
-		storage: UserDefaults = .standard,
-		serialize: Bool = false
-	) {
-		self.defaultValue = nil
 		self.key = key
 		self.storage = storage
 		self.serialized = serialize
