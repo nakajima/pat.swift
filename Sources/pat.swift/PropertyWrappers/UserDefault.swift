@@ -28,8 +28,8 @@ extension Optional: AnyOptional {
 					return value
 				}
 			} else {
-				if let value = storage.value(forKey: key) as? Value {
-					return value
+				if let value = storage.value(forKey: key) {
+					return value as? Value
 				}
 			}
 
