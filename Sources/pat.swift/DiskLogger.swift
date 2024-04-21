@@ -124,9 +124,7 @@ extension Truncator: Sequence {
 		self.location = location
 		self.maxLines = maxLines
 
-		Task(priority: .low) {
-			try Truncator.truncate(at: location, toLineCount: maxLines)
-		}
+		try? truncate()
 	}
 
 	public func trace(_ message: String) {
