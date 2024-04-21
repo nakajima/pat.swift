@@ -19,7 +19,7 @@ extension Optional: AnyOptional {
 	public var isNil: Bool { true }
 }
 
-@propertyWrapper public struct UserDefault<Value: Codable & ExpressibleByNilLiteral> {
+@propertyWrapper public struct UserDefault<Value: Codable> {
 	public var wrappedValue: Value? {
 		get {
 			if serialized {
