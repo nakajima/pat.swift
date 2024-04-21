@@ -24,7 +24,8 @@ extension Optional: AnyOptional {
 		get {
 			if serialized {
 				if let data = storage.data(forKey: key),
-					 let value = try? JSONDecoder().decode(Value.self, from: data) {
+				   let value = try? JSONDecoder().decode(Value.self, from: data)
+				{
 					return value
 				}
 			} else {

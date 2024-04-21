@@ -1,6 +1,6 @@
 //
-//  SwiftUIView.swift
-//  
+//  AwaitView.swift
+//
 //
 //  Created by Pat Nakajima on 4/20/24.
 //
@@ -35,11 +35,11 @@ public struct AwaitView<T, Content: View, Placeholder: View>: View {
 				.task {
 					await getValue()
 				}
-		case .done(let value):
+		case let .done(value):
 			content(value)
 		case .canceled:
 			Text("Canceled")
-		case .errored(let error):
+		case let .errored(error):
 			Text("Errored: \(error)")
 		}
 	}
@@ -55,19 +55,19 @@ public struct AwaitView<T, Content: View, Placeholder: View>: View {
 	func getValue() async {
 		do {
 			let value = try await valueBlock()
-			self.status = Task.isCancelled ? .canceled : .done(value)
+			status = Task.isCancelled ? .canceled : .done(value)
 		} catch {
 			if error is CancellationError {
-				self.status = .canceled
+				status = .canceled
 			} else {
-				self.status = .errored(error)
+				status = .errored(error)
 			}
 		}
 	}
 }
 
-extension AwaitView where Placeholder == Never {
-	public init(
+public extension AwaitView where Placeholder == Never {
+	init(
 		value valueBlock: @escaping () async -> T,
 		@ViewBuilder content: @escaping (T) -> Content
 	) {
@@ -77,23 +77,23 @@ extension AwaitView where Placeholder == Never {
 }
 
 #if DEBUG
-struct AwaitViewPreviews: PreviewProvider {
-	static var previews: some View {
-		AwaitView {
-			try! await Task.sleep(for: .seconds(2))
-			return "The Time is \(Date().formatted())"
-		} content: { value in
-			Text(value)
-		}
+	struct AwaitViewPreviews: PreviewProvider {
+		static var previews: some View {
+			AwaitView {
+				try! await Task.sleep(for: .seconds(2))
+				return "The Time is \(Date().formatted())"
+			} content: { value in
+				Text(value)
+			}
 
-		AwaitView {
-			try! await Task.sleep(for: .seconds(2))
-			return "The Time is \(Date().formatted())"
-		} content: { value in
-			Text(value)
-		} placeholder: {
-			Text("Loading the time.")
+			AwaitView {
+				try! await Task.sleep(for: .seconds(2))
+				return "The Time is \(Date().formatted())"
+			} content: { value in
+				Text(value)
+			} placeholder: {
+				Text("Loading the time.")
+			}
 		}
 	}
-}
 #endif

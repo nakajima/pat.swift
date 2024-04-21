@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import SwiftUI
 import Observation
+import SwiftUI
 
 @Observable public class StateContainerValue<Value> {
 	public var value: Value
@@ -32,10 +32,10 @@ public struct StateContainer<Content: View, Value>: View {
 }
 
 #if DEBUG
-#Preview {
-	StateContainer(initial: 1) { container in
-		Button("State is \(container.value)") { container.value += 1 }
-		Text("Hi")
+	#Preview {
+		StateContainer(initial: 1) { container in
+			Button("State is \(container.value)") { container.value += 1 }
+			Text("Hi")
+		}
 	}
-}
 #endif

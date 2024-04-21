@@ -1,6 +1,6 @@
 //
 //  Data.swift
-//  
+//
 //
 //  Created by Pat Nakajima on 4/7/24.
 //
