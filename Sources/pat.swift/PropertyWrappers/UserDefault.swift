@@ -40,18 +40,8 @@ extension Optional: AnyOptional {
 			if serialized {
 				storage.setValue(try? JSONEncoder().encode(newValue), forKey: key)
 			} else {
-				if let optionalValue = newValue as? AnyOptional {
-					if optionalValue.isNil {
-						storage.removeObject(forKey: key)
-					} else {
-						storage.setValue(optionalValue, forKey: key)
-					}
-				} else {
-					storage.setValue(newValue, forKey: key)
-				}
+				storage.setValue(newValue, forKey: key)
 			}
-
-			storage.synchronize()
 		}
 	}
 
