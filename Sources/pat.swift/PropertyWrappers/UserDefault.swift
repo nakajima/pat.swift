@@ -50,6 +50,8 @@ extension Optional: AnyOptional {
 					storage.setValue(newValue, forKey: key)
 				}
 			}
+
+			storage.synchronize()
 		}
 	}
 
