@@ -50,7 +50,7 @@ struct HapticPattern {
 	}
 }
 
-struct Haptics {
+public struct Haptics {
 	let engine: CHHapticEngine?
 
 	public static let shared = Haptics()
@@ -65,33 +65,33 @@ struct Haptics {
 		}
 	}
 
-	func click() {
+	public func click() {
 		var pattern = HapticPattern()
 		pattern.add(intensity: 1, sharpness: 1, relativeTime: 0)
 		pattern.play(engine: engine)
 	}
 
-	func collide() {
+	public func collide() {
 		var pattern = HapticPattern()
 		pattern.add(intensity: 0.2, sharpness: 1, relativeTime: 0)
 		pattern.play(engine: engine)
 	}
 
-	func win() {
+	public func win() {
 		var pattern = HapticPattern()
 		pattern.add(intensity: 1, sharpness: 1, relativeTime: 0)
 		pattern.add(intensity: 1, sharpness: 1, relativeTime: 0.25)
 		pattern.play(engine: engine)
 	}
 
-	func loss() {
+	public func loss() {
 		var pattern = HapticPattern()
 		pattern.add(intensity: 1, sharpness: 1, relativeTime: 0)
 		pattern.add(intensity: 1, sharpness: 0.1, relativeTime: 0.25)
 		pattern.play(engine: engine)
 	}
 
-	func tie() {
+	public func tie() {
 		var pattern = HapticPattern()
 		pattern.add(intensity: 0.2, sharpness: 1, relativeTime: 0)
 		pattern.add(intensity: 0.4, sharpness: 1, relativeTime: 0.03)
@@ -100,7 +100,7 @@ struct Haptics {
 		pattern.play(engine: engine)
 	}
 
-	func deal() {
+	public func deal() {
 		var pattern = HapticPattern()
 		pattern.add(intensity: 1, sharpness: 1, relativeTime: 0)
 		pattern.add(intensity: 0.6, sharpness: 1, relativeTime: 0.125)
@@ -108,14 +108,14 @@ struct Haptics {
 		pattern.play(engine: engine)
 	}
 
-	func doubleDown() {
+	public func doubleDown() {
 		var pattern = HapticPattern()
 		pattern.add(intensity: 1, sharpness: 0.3, relativeTime: 0)
 		pattern.add(intensity: 1, sharpness: 0.5, relativeTime: 0.25)
 		pattern.play(engine: engine)
 	}
 
-	func split() {
+	public func split() {
 		var pattern = HapticPattern()
 		pattern.add(intensity: 1, sharpness: 1, relativeTime: 0)
 		pattern.add(intensity: 1, sharpness: 1, relativeTime: 0.125)
