@@ -10,7 +10,7 @@ import SwiftUI
 import Observation
 
 public struct StateContainer<Content: View, Value>: View {
-	@Observable class Container {
+	@Observable public class Container {
 		public var value: Value
 
 		init(value: Value) {
@@ -21,7 +21,7 @@ public struct StateContainer<Content: View, Value>: View {
 	@State var container: Container
 	@ViewBuilder var content: (Container) -> Content
 
-	init(initial: Value, content: @escaping (Container) -> Content) {
+	public init(initial: Value, content: @escaping (Container) -> Content) {
 		self.container = Container(value: initial)
 		self.content = content
 	}
