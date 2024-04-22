@@ -55,7 +55,6 @@ public struct SafariViewController: UIViewControllerRepresentable {
 		}
 
 		public func gestureRecognizerShouldBegin(_: UIGestureRecognizer) -> Bool {
-			print("gestureRecognizerShouldBegin")
 			return true
 		}
 
