@@ -55,11 +55,16 @@ extension UINavigationController: UIGestureRecognizerDelegate {
 	}
 }
 
-struct SafariView: View {
+public struct SafariView: View {
 	var url: URL
 	var dismiss: (() -> Void)?
 
-	var body: some View {
+	public init(url: URL, dismiss: (() -> Void)? = nil) {
+		self.url = url
+		self.dismiss = dismiss
+	}
+
+	public var body: some View {
 		SafariViewController(url: url, dismiss: dismiss)
 			.ignoresSafeArea(.all)
 			.toolbar(.hidden, for: .navigationBar)
