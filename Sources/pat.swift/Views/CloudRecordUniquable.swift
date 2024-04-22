@@ -21,7 +21,7 @@
 		static var comparisonPath: KeyPath<Self, ComparisonValue> { get }
 	}
 
-public extension CloudRecordUniquable where Self: PersistentModel {
+	public extension CloudRecordUniquable where Self: PersistentModel {
 		@MainActor static func prune(in container: ModelContainer, logger: Logger? = nil) throws {
 			let logger = logger ?? Logger(subsystem: Bundle.main.bundleIdentifier!, category: "\(self)-pruner")
 
