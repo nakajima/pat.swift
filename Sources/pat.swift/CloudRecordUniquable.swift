@@ -10,26 +10,25 @@
 	import SwiftData
 
 	public protocol CloudRecordUniquable {
-		associatedtype Model: PersistentModel
 		associatedtype StableValue: Hashable
 		associatedtype ComparisonValue: Comparable
 
 		// An Attribute of the Model that is stable between different different installs
-		static var stableID: KeyPath<Model, StableValue> { get }
+		static var stableID: KeyPath<Self, StableValue> { get }
 
 		// A Comparable Attribute of the Model that is determined which records to keep.
 		// Greater values win, lesser values are deleted.
-		static var comparisonPath: KeyPath<Model, ComparisonValue> { get }
+		static var comparisonPath: KeyPath<Self, ComparisonValue> { get }
 	}
 
-	public extension CloudRecordUniquable {
+public extension CloudRecordUniquable where Self: PersistentModel {
 		@MainActor static func prune(in container: ModelContainer, logger: Logger? = nil) throws {
 			let logger = logger ?? Logger(subsystem: Bundle.main.bundleIdentifier!, category: "\(self)-pruner")
 
 			logger.debug("Pruning \(self)")
 
 			let context = container.mainContext
-			let descriptor = FetchDescriptor<Model>()
+			let descriptor = FetchDescriptor<Self>()
 			let records = try context.fetch(descriptor)
 
 			logger.debug("Found \(records.count) total records")
@@ -58,7 +57,7 @@
 
 			logger.debug("Found \(currentRecordIDs.count) current records")
 
-			try context.delete(model: Model.self, where: #Predicate { record in
+			try context.delete(model: Self.self, where: #Predicate { record in
 				!currentRecordIDs.contains(record.persistentModelID)
 			})
 
