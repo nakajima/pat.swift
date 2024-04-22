@@ -9,7 +9,7 @@
 	import OSLog
 	import SwiftData
 
-	protocol CloudRecordUniquable {
+	public protocol CloudRecordUniquable {
 		associatedtype Model: PersistentModel
 		associatedtype StableValue: Hashable
 		associatedtype ComparisonValue: Comparable
@@ -22,7 +22,7 @@
 		static var comparisonPath: KeyPath<Model, ComparisonValue> { get }
 	}
 
-	extension CloudRecordUniquable {
+	public extension CloudRecordUniquable {
 		@MainActor static func prune(in container: ModelContainer, logger: Logger? = nil) throws {
 			let logger = logger ?? Logger(subsystem: Bundle.main.bundleIdentifier!, category: "\(self)-pruner")
 
