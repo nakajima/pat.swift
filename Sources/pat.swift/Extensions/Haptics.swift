@@ -29,7 +29,7 @@ struct HapticPattern {
 		do {
 			try engine.start()
 		} catch {
-			Log.error("Could not start haptic engine \(error)")
+			print("Could not start haptic engine \(error)")
 		}
 
 		var hapticEvents = [CHHapticEvent]()
@@ -45,7 +45,7 @@ struct HapticPattern {
 			let player = try engine.makePlayer(with: pattern)
 			try player.start(atTime: 0)
 		} catch {
-			Log.error("Failed to play pattern: \(error.localizedDescription).")
+			print("Failed to play pattern: \(error.localizedDescription).")
 		}
 	}
 }
@@ -61,7 +61,7 @@ public struct Haptics {
 		do {
 			try engine?.start()
 		} catch {
-			Log.error("Could not start haptic engine \(error)!")
+			print("Could not start haptic engine \(error)!")
 		}
 	}
 
