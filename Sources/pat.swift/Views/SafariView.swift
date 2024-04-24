@@ -76,15 +76,14 @@ public struct SafariViewController: UIViewControllerRepresentable {
 
 public struct SafariView: View {
 	var url: URL
-	var dismiss: (() -> Void)?
+	@Environment(\.dismiss) var dismiss
 
-	public init(url: URL, dismiss: (() -> Void)? = nil) {
+	public init(url: URL) {
 		self.url = url
-		self.dismiss = dismiss
 	}
 
 	public var body: some View {
-		SafariViewController(url: url, dismiss: dismiss)
+		SafariViewController(url: url, dismiss: { dismiss() })
 			.ignoresSafeArea(.all)
 			.toolbar(.hidden, for: .navigationBar)
 	}
