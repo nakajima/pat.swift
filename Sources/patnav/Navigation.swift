@@ -14,7 +14,7 @@
 	@Observable public final class Navigation<Route: NavigationRoute> {
 		public internal(set) var path: [Route] = []
 
-		func append(_ route: Route) {
+		public func append(_ route: Route) {
 			path.append(route)
 		}
 	}
