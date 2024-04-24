@@ -34,7 +34,7 @@
 
 		@ViewBuilder var content: (Navigation<T>) -> Content
 
-		init(
+		public init(
 			for _: T.Type,
 			@ViewBuilder content: @escaping (Navigation<T>) -> Content
 		) {
