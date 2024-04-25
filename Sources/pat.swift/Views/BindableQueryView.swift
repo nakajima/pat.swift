@@ -18,7 +18,7 @@ public struct BindableQueryView<Model: PersistentModel, Content: View>: View {
 
 	@ViewBuilder var content: ([Model]) -> Content
 
-	public init(predicate: Predicate<Model>? = nil, sort: [SortDescriptor<Model>] = [], animation: Animation = .default, content: @escaping ([Model]) -> Content) {
+	public init(predicate: Predicate<Model>? = nil, sort: [SortDescriptor<Model>] = [], animation: Animation = .default, @ViewBuilder content: @escaping ([Model]) -> Content) {
 		self.predicate = predicate
 		self.sort = sort
 		self.animation = animation
