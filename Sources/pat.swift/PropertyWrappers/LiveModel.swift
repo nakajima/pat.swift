@@ -12,9 +12,9 @@ import Combine
 
 // Keep a SwiftData record up to date
 @propertyWrapper @Observable public final class LiveModel<T: PersistentModel> {
-	@MainActor var _model: T
+	@MainActor var _model: T?
 
-	@MainActor public var wrappedValue: T {
+	@MainActor public var wrappedValue: T? {
 		get { _model }
 		set {	_model = newValue	}
 	}
@@ -22,11 +22,10 @@ import Combine
 	var animation: Animation?
 	var cancellable: AnyCancellable?
 
-	@MainActor public init(wrappedValue: T, animation: Animation? = nil) {
-		self._model = wrappedValue
+	@MainActor public init(animation: Animation? = nil) {
 		self.animation = animation
 
-		if let context = wrappedValue.modelContext {
+		if let context = wrappedValue?.modelContext {
 			self.cancellable = NotificationCenter.default.publisher(for: Notification.Name.NSManagedObjectContextDidSave).sink { [weak self] notification in
 				guard let userInfo = notification.userInfo else {
 					return
