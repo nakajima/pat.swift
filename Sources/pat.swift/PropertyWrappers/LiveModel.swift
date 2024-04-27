@@ -19,10 +19,12 @@ import Combine
 		set {	_model = newValue	}
 	}
 
+	var animation: Animation?
 	var cancellable: AnyCancellable?
 
-	@MainActor public init(wrappedValue: T) {
+	@MainActor public init(wrappedValue: T, animation: Animation? = nil) {
 		self._model = wrappedValue
+		self.animation = animation
 
 		if let context = wrappedValue.modelContext {
 			self.cancellable = NotificationCenter.default.publisher(for: Notification.Name.NSManagedObjectContextDidSave).sink { [weak self] notification in
@@ -38,7 +40,13 @@ import Combine
 						return
 					}
 
-					self._model = model
+					if let animation = self.animation {
+						withAnimation(animation) {
+							self._model = model
+						}
+					} else {
+						self._model = model
+					}
 				}
 			}
 		}
