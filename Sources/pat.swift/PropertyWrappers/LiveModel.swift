@@ -26,19 +26,16 @@ import SwiftUI
 
 		if let context = wrappedValue.modelContext {
 			self.cancellable = NotificationCenter.default.publisher(for: Notification.Name.NSManagedObjectContextDidSave).sink { [weak self] notification in
-				guard let userInfo = notification.userInfo else {
+				guard let userInfo = notification.userInfo, let self else {
 					return
 				}
 
 				if let updated = userInfo["updated"], let set = updated as? NSSet,
 				   let object = Array(set).first as? NSManagedObject,
 				   let id = object.objectID.persistentIdentifier,
-				   let model = context.model(for: id) as? T
+				   let model = context.model(for: id) as? T,
+					 model == self._model
 				{
-					guard let self else {
-						return
-					}
-
 					self._model = model
 				}
 			}
