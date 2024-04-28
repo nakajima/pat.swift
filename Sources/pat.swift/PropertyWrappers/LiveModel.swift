@@ -1,51 +1,45 @@
 //
 //  LiveModel.swift
-//  
+//
 //
 //  Created by Pat Nakajima on 4/26/24.
 //
 
+import Combine
+import CoreData
 import SwiftData
 import SwiftUI
-import CoreData
-import Combine
 
 // Keep a SwiftData record up to date
 @propertyWrapper @Observable public final class LiveModel<T: PersistentModel> {
-	@MainActor var _model: T?
+	@MainActor var _model: T
 
-	@MainActor public var wrappedValue: T? {
+	@MainActor public var wrappedValue: T {
 		get { _model }
-		set {	_model = newValue	}
+		set { _model = newValue }
 	}
 
-	var animation: Animation?
 	var cancellable: AnyCancellable?
 
-	@MainActor public init(animation: Animation? = nil) {
-		self.animation = animation
+	@MainActor public init(wrappedValue: T) {
+		self._model = wrappedValue
 
-		if let context = wrappedValue?.modelContext {
+		if let context = wrappedValue.modelContext {
 			self.cancellable = NotificationCenter.default.publisher(for: Notification.Name.NSManagedObjectContextDidSave).sink { [weak self] notification in
 				guard let userInfo = notification.userInfo else {
 					return
 				}
 
 				if let updated = userInfo["updated"], let set = updated as? NSSet,
-					 let object = Array(set).first as? NSManagedObject,
-					 let id = object.objectID.persistentIdentifier,
-					 let model = context.model(for: id) as? T {
+				   let object = Array(set).first as? NSManagedObject,
+				   let id = object.objectID.persistentIdentifier,
+				   let model = context.model(for: id) as? T
+				{
 					guard let self else {
 						return
 					}
 
-					if let animation = self.animation {
-						withAnimation(animation) {
-							self._model = model
-						}
-					} else {
-						self._model = model
-					}
+					self._model = model
 				}
 			}
 		}
@@ -58,7 +52,7 @@ import Combine
 
 //  From https://github.com/fatbobman/SwiftDataKit/blob/main/Sources/SwiftDataKit/CoreData/NSManagedObjectID.swift
 
-fileprivate extension NSManagedObjectID {
+private extension NSManagedObjectID {
 	// Compute PersistentIdentifier from NSManagedObjectID
 	var persistentIdentifier: PersistentIdentifier? {
 		guard let storeIdentifier, let entityName else { return nil }
@@ -79,7 +73,7 @@ fileprivate extension NSManagedObjectID {
 }
 
 // Extensions to expose needed implementation details
-fileprivate extension NSManagedObjectID {
+private extension NSManagedObjectID {
 	// Primary key is last path component of URI
 	var primaryKey: String {
 		uriRepresentation().lastPathComponent
@@ -99,7 +93,7 @@ fileprivate extension NSManagedObjectID {
 }
 
 // Model to represent identifier implementation as JSON
-fileprivate struct PersistentIdentifierJSON: Codable {
+private struct PersistentIdentifierJSON: Codable {
 	struct Implementation: Codable {
 		var primaryKey: String
 		var uriRepresentation: URL
