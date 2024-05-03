@@ -5,7 +5,7 @@
 //  Created by Pat Nakajima on 4/20/24.
 //
 
-#if canImport(SafariServices)
+#if canImport(SafariServices) && canImport(UIKit)
 	import SafariServices
 	import SwiftUI
 
