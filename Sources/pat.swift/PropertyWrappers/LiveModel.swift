@@ -12,7 +12,7 @@ import SwiftUI
 
 // Keep a SwiftData record up to date
 @propertyWrapper @Observable public final class LiveModel<T: PersistentModel> {
-	@MainActor var _model: T
+	var _model: T
 
 	@MainActor public var wrappedValue: T {
 		get { _model }
@@ -25,17 +25,21 @@ import SwiftUI
 		self._model = wrappedValue
 
 		if let context = wrappedValue.modelContext {
-			self.cancellable = NotificationCenter.default.publisher(for: Notification.Name.NSManagedObjectContextDidSave).sink { [weak self] notification in
+			self.cancellable = NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave).sink { [weak self] notification in
 				guard let userInfo = notification.userInfo, let self else {
 					return
 				}
 
-				if let updated = userInfo["updated"], let set = updated as? NSSet,
-				   let object = Array(set).first as? NSManagedObject,
-				   let id = object.objectID.persistentIdentifier,
-				   let model = context.model(for: id) as? T,
-					 model == self._model
+				if let updated = userInfo["updated"],
+					 // Convert to an actual swift set
+					 let set = (updated as? NSSet as? Set<NSManagedObject>),
+					 // See if this update is for our model
+					 let object = set.first(where: { $0.objectID.persistentIdentifier == self._model.id }),
+					 // We know we have a persistent identifier because of the above check, so try to reload
+					 // our model from its context.
+					 let model: T = context.registeredModel(for: object.objectID.persistentIdentifier!)
 				{
+					// Update our model, so the Observation system can let the view know.
 					self._model = model
 				}
 			}
@@ -101,3 +105,69 @@ private struct PersistentIdentifierJSON: Codable {
 
 	var implementation: Implementation
 }
+
+#if DEBUG
+import SwiftData
+
+@Model fileprivate final class Person {
+	var name: String
+	var friendCount: Int = 0
+
+	init(name: String) {
+		self.name = name
+	}
+}
+
+fileprivate struct PeopleView: View {
+	@Query var people: [Person]
+	@Environment(\.modelContext) var modelContext
+
+	var body: some View {
+		NavigationStack {
+			List {
+				Section {
+					ForEach(people, id: \.name) { person in
+						PersonView(person: person)
+					}
+				}
+
+				Button("Add a random friend") {
+					let container = modelContext.container
+					let personID = people.randomElement()!.id
+
+					Task {
+						let context = ModelContext(container)
+						let person = context.model(for: personID) as! Person
+						person.friendCount += 1
+						print("\(person.name) now has friend count \(person.friendCount)")
+						try! context.save()
+					}
+				}
+			}
+			.onAppear {
+				for name in ["Frasier", "Niles", "Daphne", "Martin", "Eddy"] {
+					let person = Person(name: name)
+					modelContext.insert(person)
+					try! modelContext.save()
+				}
+			}
+		}
+	}
+}
+
+fileprivate struct PersonView: View {
+	@LiveModel var person: Person
+
+	var body: some View {
+		HStack {
+			Text(person.name)
+			Text("\(person.friendCount) friend\(person.friendCount == 1 ? "" : "s")")
+		}
+	}
+}
+
+#Preview {
+	PeopleView()
+		.modelContainer(for: Person.self, inMemory: true)
+}
+#endif
