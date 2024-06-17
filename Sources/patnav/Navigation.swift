@@ -17,6 +17,10 @@
 		public func append(_ route: Route) {
 			path.append(route)
 		}
+
+		public func pop() {
+			_ = path.popLast()
+		}
 	}
 
 	public extension Navigation {
